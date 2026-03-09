@@ -1,0 +1,43 @@
+name: ringtoku
+description: "RingToku - AI English conversation app with long-term memory for Japanese learners"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  flutter_riverpod: ^2.5.1
+
+  # Navigation
+  go_router: ^14.2.7
+
+  # UI
+  google_fonts: ^6.2.1
+  fl_chart: ^0.68.0
+  shimmer: ^3.0.0
+  animated_text_kit: ^4.2.2
+
+  # Local Storage
+  shared_preferences: ^2.3.1
+
+  # Utils
+  uuid: ^4.4.2
+  intl: ^0.19.0
+  equatable: ^2.0.5
+
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/

@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RingToku PRD — Product Requirements Document</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+  :root {
+    --primary: #2563EB;
+    --primary-light: #EFF6FF;
+    --accent: #7C3AED;
+    --accent-light: #F5F3FF;
+    --success: #059669;
+    --success-light: #ECFDF5;
+    --warning: #D97706;
+    --warning-light: #FFFBEB;
+    --danger: #DC2626;
+    --text: #111827;
+    --text-secondary: #6B7280;
+    --border: #E5E7EB;
+    --bg: #F9FAFB;
+    --white: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* Cover */
+  .cover {
+    background: linear-gradient(135deg, #1E1B4B 0%, #2563EB 50%, #7C3AED 100%);
+    color: white;
+    padding: 80px 60px;
+    min-height: 220px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -40px;
+    width: 200px; height: 200px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .cover-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .cover h1 {
+    font-size: 52px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .cover h1 span { color: #A5B4FC; }
+  .cover .tagline {
+    font-size: 18px;
+    font-weight: 300;
+    opacity: 0.85;
+    margin-bottom: 32px;
+    font-style: italic;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    opacity: 0.75;
+  }
+  .cover-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* Layout */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 40px;
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+  }
+  .toc h2 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 32px;
+  }
+  .toc a {
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 3px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .toc a:hover { text-decoration: underline; }
+  .toc-num {
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 10px;
+    font-weight: 700;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* Sections */
+  .section {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-num {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .section h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 20px 0 10px;
+  }
+  p { margin-bottom: 10px; color: #374151; }
+
+  /* Cards */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin: 16px 0;
+  }
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .card-icon { font-size: 24px; margin-bottom: 8px; }
+  .card h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .card p { font-size: 12px; color: var(--text-secondary); margin: 0; }
+  .card.blue { border-color: #BFDBFE; background: var(--primary-light); }
+  .card.purple { border-color: #DDD6FE; background: var(--accent-light); }
+  .card.green { border-color: #A7F3D0; background: var(--success-light); }
+  .card.yellow { border-color: #FDE68A; background: var(--warning-light); }
+
+  /* Feature table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 14px 0;
+  }
+  th {
+    background: #F3F4F6;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+    border: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #FAFAFA; }
+
+  /* Badge */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge-mvp { background: #FEE2E2; color: #DC2626; }
+  .badge-v2 { background: #FEF3C7; color: #D97706; }
+  .badge-v3 { background: #D1FAE5; color: #059669; }
+  .badge-p0 { background: #EDE9FE; color: #7C3AED; }
+  .badge-p1 { background: #DBEAFE; color: #2563EB; }
+
+  /* User story */
+  .story {
+    background: #F8FAFC;
+    border-left: 4px solid var(--primary);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 10px 0;
+    font-size: 13px;
+    font-style: italic;
+    color: #4B5563;
+  }
+
+  /* Tech stack */
+  .tech-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .tech-item:last-child { border-bottom: none; }
+  .tech-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    min-width: 110px;
+    padding-top: 2px;
+  }
+  .tech-value { font-size: 13px; color: var(--text); }
+  .tech-value code {
+    background: #F3F4F6;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: monospace;
+    font-size: 12px;
+    color: var(--accent);
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 9px; top: 8px; bottom: 8px;
+    width: 2px;
+    background: var(--border);
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -24px; top: 6px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 2px solid white;
+    box-shadow: 0 0 0 2px var(--primary);
+  }
+  .timeline-item h4 { font-size: 13px; font-weight: 600; }
+  .timeline-item p { font-size: 12px; color: var(--text-secondary); margin: 0; }
+  .timeline-phase {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: 4px;
+  }
+
+  /* Callout */
+  .callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 13px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .callout-icon { font-size: 18px; flex-shrink: 0; }
+  .callout.info { background: var(--primary-light); border: 1px solid #BFDBFE; }
+  .callout.warning { background: var(--warning-light); border: 1px solid #FDE68A; }
+  .callout.success { background: var(--success-light); border: 1px solid #A7F3D0; }
+
+  /* Screen mockup */
+  .screens {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .screen {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 12px;
+  }
+  .screen-header {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    padding: 10px 14px;
+    font-weight: 600;
+    font-size: 11px;
+  }
+  .screen-body {
+    padding: 12px 14px;
+    background: white;
+  }
+  .screen-row {
+    background: #F8FAFC;
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin-bottom: 6px;
+    font-size: 11px;
+    color: #4B5563;
+  }
+
+  ul {
+    padding-left: 20px;
+    margin: 8px 0;
+  }
+  ul li { margin-bottom: 4px; font-size: 13px; color: #374151; }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 20px 0;
+  }
+
+  .footer {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 12px;
+    padding: 32px 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- Cover -->
+<div class="cover">
+  <div class="container" style="padding-top:0; padding-bottom:0;">
+    <div class="cover-badge">Product Requirements Document</div>
+    <h1>Ring<span>Toku</span></h1>
+    <p class="tagline">「記録する、話す、身につく」— 기억이 있는 AI 영어 회화 서비스</p>
+    <div class="cover-meta">
+      <span>📱 Flutter (iOS / Android)</span>
+      <span>🎯 Target: 일본 영어 학습자</span>
+      <span>📅 Version 1.0</span>
+      <span>🏗️ MVP → 2025 Q4</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>목차</h2>
+    <div class="toc-grid">
+      <a href="#s1"><div class="toc-num">1</div> 프로젝트 개요</a>
+      <a href="#s2"><div class="toc-num">2</div> 타겟 사용자 & 페르소나</a>
+      <a href="#s3"><div class="toc-num">3</div> 핵심 기능 정의</a>
+      <a href="#s4"><div class="toc-num">4</div> 기술 아키텍처</a>
+      <a href="#s5"><div class="toc-num">5</div> Flutter 화면 구성</a>
+      <a href="#s6"><div class="toc-num">6</div> 데이터 모델</a>
+      <a href="#s7"><div class="toc-num">7</div> 개발 로드맵</a>
+      <a href="#s8"><div class="toc-num">8</div> 포트폴리오 포인트</a>
+    </div>
+  </div>
+
+  <!-- 1. 개요 -->
+  <div class="section" id="s1">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <h2>프로젝트 개요</h2>
+    </div>
+
+    <div class="card-grid">
+      <div class="card blue">
+        <div class="card-icon">🎯</div>
+        <h4>Problem Statement</h4>
+        <p>일본인 영어 학습자는 발화 기회가 부족하고, 기존 AI 챗봇은 매 대화가 리셋되어 개인화가 없다</p>
+      </div>
+      <div class="card purple">
+        <div class="card-icon">💡</div>
+        <h4>Our Solution</h4>
+        <p>매일 AI가 전화를 걸어주고, 과거 대화를 기억해 개인화된 영어 회화 및 문법 교정을 제공</p>
+      </div>
+      <div class="card green">
+        <div class="card-icon">🚀</div>
+        <h4>Core Differentiator</h4>
+        <p>RAG 기반 장기 기억: "저번에 말씀하신 고양이 Leon은 잘 있나요?" 수준의 기억력</p>
+      </div>
+      <div class="card yellow">
+        <div class="card-icon">📊</div>
+        <h4>Market Fit</h4>
+        <p>일본 영어 교육 시장 2.3조엔 규모, AI 튜터 수요 급성장 중</p>
+      </div>
+    </div>
+
+    <h3>서비스 한 줄 정의</h3>
+    <div class="callout info">
+      <div class="callout-icon">📌</div>
+      <div>"RingToku는 RAG 기반 장기 기억 기술을 활용하여, 어제의 대화를 내일의 복습으로 연결하는 일본 맞춤형 AI 영어 회화 Flutter 앱입니다."</div>
+    </div>
+  </div>
+
+  <!-- 2. 타겟 -->
+  <div class="section" id="s2">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <h2>타겟 사용자 & 페르소나</h2>
+    </div>
+
+    <div class="card-grid">
+      <div class="card blue">
+        <div class="card-icon">👩‍💼</div>
+        <h4>Primary: 직장인 Yuki (28세)</h4>
+        <p>영어 회의가 두렵고, 매일 짧은 시간 연습하고 싶다. 발음보다 "자연스러운 대화"가 목표</p>
+      </div>
+      <div class="card purple">
+        <div class="card-icon">🎓</div>
+        <h4>Secondary: 대학생 Kenji (22세)</h4>
+        <p>해외 취업 목표. TOEIC은 있는데 실전 회화 경험이 없다. 포트폴리오로 영어 이력 쌓고 싶음</p>
+      </div>
+      <div class="card green">
+        <div class="card-icon">👨‍💻</div>
+        <h4>Tertiary: 엔지니어 Hiroshi (35세)</h4>
+        <p>해외 컨퍼런스 참가를 위해 비즈니스 영어 필요. 체계적인 문법 교정 및 분석 리포트를 원함</p>
+      </div>
+    </div>
+
+    <h3>User Stories</h3>
+    <div class="story">As Yuki, I want to receive a daily call so that I practice speaking even on busy days without planning ahead.</div>
+    <div class="story">As Kenji, I want the AI to remember my goals and past topics so that each conversation feels personally tailored.</div>
+    <div class="story">As Hiroshi, I want to see a grammar error report after each call so that I can track my improvement over time.</div>
+  </div>
+
+  <!-- 3. 기능 -->
+  <div class="section" id="s3">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <h2>핵심 기능 정의</h2>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>기능</th>
+          <th>설명</th>
+          <th>우선순위</th>
+          <th>단계</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>📞 Daily AI Call</strong></td>
+          <td>매일 지정 시간에 앱 푸시 알림 → 탭하면 AI와 음성 통화 시작 (10~15분)</td>
+          <td><span class="badge badge-p0">P0</span></td>
+          <td><span class="badge badge-mvp">MVP</span></td>
+        </tr>
+        <tr>
+          <td><strong>🧠 Memory Recall</strong></td>
+          <td>과거 대화 내용을 Vector DB에 저장, 새 통화 시작 시 관련 기억을 검색해 자연스럽게 언급</td>
+          <td><span class="badge badge-p0">P0</span></td>
+          <td><span class="badge badge-mvp">MVP</span></td>
+        </tr>
+        <tr>
+          <td><strong>📝 Grammar Error Log</strong></td>
+          <td>통화 중 감지된 문법 오류를 실시간 분석, 통화 종료 후 리포트로 제공</td>
+          <td><span class="badge badge-p0">P0</span></td>
+          <td><span class="badge badge-mvp">MVP</span></td>
+        </tr>
+        <tr>
+          <td><strong>📊 Progress Dashboard</strong></td>
+          <td>주간 통화 횟수, 총 통화 시간, 자주 틀리는 문법 패턴 시각화</td>
+          <td><span class="badge badge-p1">P1</span></td>
+          <td><span class="badge badge-mvp">MVP</span></td>
+        </tr>
+        <tr>
+          <td><strong>🔁 Smart Recall Review</strong></td>
+          <td>에빙하우스 망각곡선 기반으로 3일 전 틀렸던 표현을 오늘 대화에 자연스럽게 재등장</td>
+          <td><span class="badge badge-p1">P1</span></td>
+          <td><span class="badge badge-v2">V2</span></td>
+        </tr>
+        <tr>
+          <td><strong>🇯🇵 JP Assist Mode</strong></td>
+          <td>영어가 막힐 때 일본어로 질문하면 바로 설명해주는 일본어 보조 모드</td>
+          <td><span class="badge badge-p1">P1</span></td>
+          <td><span class="badge badge-v2">V2</span></td>
+        </tr>
+        <tr>
+          <td><strong>💼 Business / Casual 모드</strong></td>
+          <td>격식 있는 비즈니스 영어와 일상 대화를 구분, 모드별 다른 AI 페르소나 적용</td>
+          <td><span class="badge badge-p1">P1</span></td>
+          <td><span class="badge badge-v2">V2</span></td>
+        </tr>
+        <tr>
+          <td><strong>🏆 Streak & 배지</strong></td>
+          <td>연속 통화 일수, 총 회화 시간 기반 업적 시스템으로 지속 학습 유도</td>
+          <td><span class="badge badge-p1">P1</span></td>
+          <td><span class="badge badge-v3">V3</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Memory Recall 동작 흐름 예시</h3>
+    <div class="callout success">
+      <div class="callout-icon">💬</div>
+      <div>
+        <strong>1일차:</strong> "I have a cat named Leon."<br>
+        → AI가 요약: <code>user_has_cat: Leon</code>으로 Vector DB 저장<br><br>
+        <strong>4일차:</strong> "I'm so tired today."<br>
+        → DB 검색 → Leon 관련 기억 매칭<br>
+        → AI 응답: <em>"I'm sorry to hear that. Maybe spending some time with Leon would help?"</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 기술 아키텍처 -->
+  <div class="section" id="s4">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <h2>기술 아키텍처</h2>
+    </div>
+
+    <h3>기술 스택</h3>
+    <div class="tech-item">
+      <div class="tech-label">Frontend</div>
+      <div class="tech-value"><code>Flutter 3.x</code> — iOS / Android 크로스플랫폼, 전화 UI 구현</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">STT</div>
+      <div class="tech-value"><code>OpenAI Whisper API</code> — 실시간 음성 → 텍스트 변환 (다국어 지원)</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">LLM</div>
+      <div class="tech-value"><code>Gemini 1.5 Flash</code> (실시간 대화) + <code>Gemini 1.5 Pro</code> (문법 분석 후처리)</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">TTS</div>
+      <div class="tech-value"><code>Google Cloud TTS</code> 또는 <code>ElevenLabs API</code> — 자연스러운 영어 음성 합성</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">Vector DB</div>
+      <div class="tech-value"><code>Supabase pgvector</code> 또는 <code>Pinecone</code> — 대화 요약 임베딩 저장 및 유사도 검색</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">Backend</div>
+      <div class="tech-value"><code>Python FastAPI</code> — STT/LLM/TTS 오케스트레이션, RAG 파이프라인</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">DB (RDB)</div>
+      <div class="tech-value"><code>Supabase PostgreSQL</code> — 사용자 정보, 통화 이력, 문법 오류 로그</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">Auth</div>
+      <div class="tech-value"><code>Supabase Auth</code> — 이메일 / 구글 로그인</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">Push 알림</div>
+      <div class="tech-value"><code>Firebase Cloud Messaging (FCM)</code> — 매일 통화 알림</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-label">로컬 DB</div>
+      <div class="tech-value"><code>Drift (Flutter)</code> — 오프라인 캐시, 통화 기록 로컬 저장</div>
+    </div>
+
+    <h3>RAG 파이프라인 흐름</h3>
+    <div style="background:#F8FAFC; border:1px solid var(--border); border-radius:10px; padding:20px; font-size:12px; font-family:monospace; color:#374151; line-height:2;">
+      [통화 종료]<br>
+      &nbsp;&nbsp;↓<br>
+      Whisper STT → 전체 transcript 생성<br>
+      &nbsp;&nbsp;↓<br>
+      LLM → 대화 요약 + 개인 정보 추출 (이름, 관심사, 목표 등)<br>
+      &nbsp;&nbsp;↓<br>
+      OpenAI Embeddings API → 벡터 생성<br>
+      &nbsp;&nbsp;↓<br>
+      Vector DB (Supabase pgvector) 저장<br>
+      <br>
+      [새 통화 시작]<br>
+      &nbsp;&nbsp;↓<br>
+      "오늘 기분 어때요?" → 임베딩 생성 → Vector DB 유사도 검색<br>
+      &nbsp;&nbsp;↓<br>
+      관련 과거 대화 컨텍스트 LLM에 주입 (RAG)<br>
+      &nbsp;&nbsp;↓<br>
+      AI가 기억을 활용해 자연스러운 대화 시작
+    </div>
+  </div>
+
+  <!-- 5. Flutter 화면 구성 -->
+  <div class="section" id="s5">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <h2>Flutter 화면 구성 (UI Flow)</h2>
+    </div>
+
+    <div class="screens">
+      <div class="screen">
+        <div class="screen-header">📱 Splash / Onboarding</div>
+        <div class="screen-body">
+          <div class="screen-row">① RingToku 브랜딩</div>
+          <div class="screen-row">② 학습 목표 선택<br>(비즈니스/일상/여행)</div>
+          <div class="screen-row">③ 매일 통화 시간 설정</div>
+          <div class="screen-row">④ 소셜 로그인</div>
+        </div>
+      </div>
+      <div class="screen">
+        <div class="screen-header">🏠 Home (메인)</div>
+        <div class="screen-body">
+          <div class="screen-row">✅ Streak 카운터 표시</div>
+          <div class="screen-row">📞 "지금 전화 받기" CTA 버튼</div>
+          <div class="screen-row">🕐 오늘 예약된 통화 시간</div>
+          <div class="screen-row">📊 이번 주 요약 카드</div>
+        </div>
+      </div>
+      <div class="screen">
+        <div class="screen-header">📞 Call Screen</div>
+        <div class="screen-body">
+          <div class="screen-row">🎙️ AI 음성 파형 애니메이션</div>
+          <div class="screen-row">⏱️ 통화 시간 타이머</div>
+          <div class="screen-row">💬 실시간 자막 표시</div>
+          <div class="screen-row">🔴 종료 버튼</div>
+        </div>
+      </div>
+      <div class="screen">
+        <div class="screen-header">📊 Report Screen</div>
+        <div class="screen-body">
+          <div class="screen-row">✏️ 오늘 문법 오류 목록</div>
+          <div class="screen-row">💡 교정 예문 제안</div>
+          <div class="screen-row">📅 틀린 패턴 통계 그래프</div>
+          <div class="screen-row">🔖 오늘의 핵심 표현</div>
+        </div>
+      </div>
+      <div class="screen">
+        <div class="screen-header">🧠 Memory Tab</div>
+        <div class="screen-body">
+          <div class="screen-row">📁 AI가 기억하는 나의 정보</div>
+          <div class="screen-row">🗂️ 과거 통화 요약 리스트</div>
+          <div class="screen-row">✏️ 기억 수정/삭제 기능</div>
+        </div>
+      </div>
+      <div class="screen">
+        <div class="screen-header">👤 Profile / Settings</div>
+        <div class="screen-body">
+          <div class="screen-row">🎯 학습 목표 변경</div>
+          <div class="screen-row">⏰ 통화 알림 시간 설정</div>
+          <div class="screen-row">🌐 JP Assist 모드 on/off</div>
+          <div class="screen-row">📈 전체 통계 뷰</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-icon">⚠️</div>
+      <div><strong>Flutter 구현 포인트:</strong> Call Screen은 <code>flutter_webrtc</code> 또는 <code>agora_rtc_engine</code> 패키지 활용 권장. 실시간 자막은 <code>StreamBuilder</code>로 WebSocket 연결. 통화 기록은 <code>Drift</code>로 로컬 캐싱.</div>
+    </div>
+  </div>
+
+  <!-- 6. 데이터 모델 -->
+  <div class="section" id="s6">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <h2>데이터 모델</h2>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>테이블</th><th>주요 필드</th><th>용도</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>users</code></td>
+          <td>id, email, name, learning_goal, call_time, streak_count, created_at</td>
+          <td>사용자 기본 정보</td>
+        </tr>
+        <tr>
+          <td><code>calls</code></td>
+          <td>id, user_id, started_at, ended_at, duration_sec, transcript_text, summary</td>
+          <td>통화 이력 전체 저장</td>
+        </tr>
+        <tr>
+          <td><code>grammar_errors</code></td>
+          <td>id, call_id, user_id, original_text, corrected_text, error_type, occurred_at</td>
+          <td>문법 오류 로그 & 분석</td>
+        </tr>
+        <tr>
+          <td><code>memories</code></td>
+          <td>id, user_id, content, embedding (vector), source_call_id, created_at</td>
+          <td>RAG용 Vector DB 핵심 테이블</td>
+        </tr>
+        <tr>
+          <td><code>review_queue</code></td>
+          <td>id, user_id, grammar_error_id, next_review_at, reviewed_count</td>
+          <td>에빙하우스 망각곡선 복습 스케줄</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 7. 로드맵 -->
+  <div class="section" id="s7">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <h2>개발 로드맵</h2>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-phase">Week 1–2 · MVP Phase 1</div>
+        <h4>기반 인프라 구축</h4>
+        <p>Flutter 프로젝트 셋업, Supabase 연동, FastAPI 백엔드 기본 구조, Auth 구현</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-phase">Week 3–4 · MVP Phase 2</div>
+        <h4>음성 통화 핵심 기능</h4>
+        <p>STT (Whisper) → LLM (Gemini) → TTS 파이프라인 구현, Call Screen UI, 실시간 자막</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-phase">Week 5–6 · MVP Phase 3</div>
+        <h4>RAG 메모리 시스템</h4>
+        <p>대화 요약 & 임베딩 저장, Vector 검색 파이프라인, Memory Tab UI, 기억 기반 대화 테스트</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-phase">Week 7–8 · MVP Phase 4</div>
+        <h4>문법 분석 & 리포트</h4>
+        <p>Grammar Error 감지 로직, Report Screen UI, 진행 대시보드, FCM 푸시 알림</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-phase">Week 9–10 · V2</div>
+        <h4>고도화 & 일본 시장 특화</h4>
+        <p>JP Assist Mode, Business/Casual 모드, 에빙하우스 복습 큐, 스트릭 & 배지 시스템</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-phase">Week 11–12 · Launch Prep</div>
+        <h4>QA & 출시 준비</h4>
+        <p>버그 수정, 성능 최적화, TestFlight/Play Store 내부 테스트, 랜딩 페이지 제작</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. 포트폴리오 포인트 -->
+  <div class="section" id="s8">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <h2>포트폴리오 어필 포인트</h2>
+    </div>
+
+    <div class="card-grid">
+      <div class="card blue">
+        <div class="card-icon">🤖</div>
+        <h4>RAG 아키텍처 설계</h4>
+        <p>단순 ChatBot이 아닌 Vector DB 기반 장기 기억 시스템을 직접 설계하고 구현</p>
+      </div>
+      <div class="card purple">
+        <div class="card-icon">🌏</div>
+        <h4>실제 시장 문제 해결</h4>
+        <p>일본 영어 학습 시장의 "휘발성 대화" 문제를 기술로 해결한 Product Thinking 강조</p>
+      </div>
+      <div class="card green">
+        <div class="card-icon">📱</div>
+        <h4>Full-Stack Flutter</h4>
+        <p>Flutter + FastAPI + Supabase + AI API의 E2E 통합 구현 능력 입증</p>
+      </div>
+      <div class="card yellow">
+        <div class="card-icon">📈</div>
+        <h4>데이터 기반 개인화</h4>
+        <p>사용자 발화 데이터를 자산화하여 학습 효율을 극대화하는 데이터 파이프라인 설계</p>
+      </div>
+    </div>
+
+    <h3>면접에서 쓸 수 있는 스토리</h3>
+    <div class="callout success">
+      <div class="callout-icon">🎤</div>
+      <div>
+        <em>"기존 AI 영어 학습 앱들은 대화가 종료되면 모든 컨텍스트가 초기화됩니다. RingToku는 RAG(Retrieval Augmented Generation) 기술을 활용해 사용자의 모든 발화 데이터를 임베딩 벡터로 변환, Vector DB에 저장합니다. 다음 통화 시 이 데이터를 유사도 검색으로 소환해 AI가 마치 오랜 친구처럼 사용자를 기억합니다. 이를 통해 학습 지속률을 높이고 개인 맞춤형 문법 교정을 제공합니다."</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    RingToku PRD v1.0 &nbsp;·&nbsp; Flutter App for Japanese English Learners &nbsp;·&nbsp; 「記録する、話す、身につく」
+  </div>
+
+</div>
+</body>
+</html>

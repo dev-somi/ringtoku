@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter --version)",
+      "Bash(flutter create . --project-name ringtoku --org com.ringtoku --platforms ios,android)",
+      "Bash(c:/Users/Somi/Desktop/Flutter_Workplace/ringtoku/pubspec.yaml:*)",
+      "Bash(python3 -c \":*)"
+    ]
+  }
+}
